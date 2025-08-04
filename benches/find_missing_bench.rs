@@ -4,11 +4,12 @@ use xortrick::{find_missing, find_missing_iter, find_missing_opt};
 fn bench_find_missing(c: &mut Criterion) {
     let mut group = c.benchmark_group("find_missing");
     let n = 100_000;
+    let total: Vec<i32> = (1..=n).collect();
     let input: Vec<i32> = (1..=n).filter(|&x| x != 789).collect();
 
     for i in [20u64, 21u64].iter() {
         group.bench_with_input(BenchmarkId::new("simple solution", i), i, |b, _| {
-            b.iter(|| find_missing(black_box(&input), black_box(n)))
+            b.iter(|| find_missing(black_box(&input), black_box(&total)))
         });
         group.bench_with_input(BenchmarkId::new("iter solution", i), i, |b, _| {
             b.iter(|| find_missing_iter(black_box(&input), black_box(n)))
